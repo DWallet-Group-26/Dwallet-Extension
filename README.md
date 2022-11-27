@@ -1,11 +1,19 @@
-## 1. How it was created:
 
-[Medium. How To Create A Google Chrome Extension With React](https://medium.com/javascript-in-plain-english/how-to-create-google-chrome-extension-using-react-js-5c9e343323ff)
+# Dwallet-Extension
+
+A user-friendly browser extension that creates and connects to the user’s multisignature wallet. Is able to send or receive tokens and interact with the Dapp.
+
+## 1. How to test as website:
+
+```shell
+yarn install
+yarn start
+```
 
 ## 2. How to build this extension:
 
-```
-$ yarn run build
+```shell
+yarn run build
 ```
 
 ## 3. How to add it to your Chrome browser:
@@ -16,4 +24,3 @@ Select `/build` folder
 
 
 
-# Dwallet-Extension
