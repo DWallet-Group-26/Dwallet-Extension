@@ -15,19 +15,33 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-const account = '0x615f11359Bf78f10F8078257730362296A3fff1E';
 export const Profile = () => {
 	let { push } = useHistory();
 	const [age, setAge] = React.useState('');
+	const [account, setAccount] = React.useState('0x615f11359Bf78f10F8078257730362296A3fff1E');
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setAge(event.target.value as string);
 	};
 
-	const [open, setOpen] = React.useState(false);
-	const handleClick = () => {
-		setOpen(true);
-		navigator.clipboard.writeText(window.location.toString());
+	const [open, setOpen] = React.useState({
+		id: '',
+		bool: false
+	});
+	const handleClick = id => {
+		setOpen({
+			id: id,
+			bool: true
+		});
+		navigator.clipboard.writeText(account);
+		setTimeout(
+			() =>
+				setOpen({
+					id: 1,
+					bool: false
+				}),
+			1000
+		);
 	};
 
 	return (
@@ -68,7 +82,7 @@ export const Profile = () => {
 						{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
 					</span>
 					<button
-						onClick={handleClick}
+						onClick={() => handleClick(1)}
 						style={{
 							position: 'absolute',
 							top: 130,
@@ -79,6 +93,9 @@ export const Profile = () => {
 						}}
 					>
 						<ContentCopyIcon fontSize="small" style={{ color: 'grey' }} />
+						{open?.id == '1' && open?.bool && (
+							<span style={{ fontSize: '8px', zIndex: 1000, position: 'absolute' }}>Copied</span>
+						)}
 					</button>
 				</div>
 				<div>
@@ -148,7 +165,7 @@ export const Profile = () => {
 							{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
 						</p>
 						<button
-							onClick={handleClick}
+							onClick={() => handleClick('2')}
 							style={{
 								border: 'none',
 								background: 'transparent',
@@ -158,6 +175,9 @@ export const Profile = () => {
 							}}
 						>
 							<ContentCopyIcon fontSize="small" style={{ color: 'grey' }} />
+							{open?.id == '2' && open?.bool && (
+								<span style={{ fontSize: '8px', zIndex: 1000, position: 'absolute' }}>Copied</span>
+							)}
 						</button>
 					</div>
 
