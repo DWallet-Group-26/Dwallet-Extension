@@ -5,7 +5,7 @@ import { getCurrentTabUId, getCurrentTabUrl } from '../chrome/utils';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-export const Home = () => {
+export const Password = () => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
 	const [password, setPassword] = useState('');
@@ -64,23 +64,38 @@ export const Home = () => {
 					className="logo"
 				/>
 				<p className="title">Dwallet</p>
-				<div className="password-container">
+				<div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', height: 190 }}>
+					<TextField
+						id="outlined-password-input"
+						label="Password"
+						type="password"
+						autoComplete="current-password"
+						value={password}
+						onChange={e => {
+							setPassword(e.target.value);
+						}}
+						size="small"
+					/>
+
+					<TextField
+						id="outlined-password-input"
+						label="Confirm Password"
+						type="password"
+						autoComplete="current-password"
+						value={confirmPassword}
+						onChange={e => {
+							setConfirmPassword(e.target.value);
+						}}
+						size="small"
+					/>
+
 					<Button
 						variant="contained"
 						className="submit-button"
-						onClick={() => push('/key')}
-						sx={{ borderRadius: 10 }}
+						onClick={submit}
+						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
 					>
-						Create Wallet
-					</Button>
-					<p style={{ color: 'black', fontSize: '18px' }}>or</p>
-					<Button
-						variant="contained"
-						className="submit-button"
-						onClick={() => console.log('Load Wallet')}
-						sx={{ borderRadius: 10 }}
-					>
-						Load Wallet
+						Create
 					</Button>
 				</div>
 			</header>

@@ -16,11 +16,14 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import TextField from '@mui/material/TextField';
 
 const account = '0x615f11359Bf78f10F8078257730362296A3fff1E';
 export const Send = () => {
 	let { push } = useHistory();
 	const [age, setAge] = React.useState('');
+	const [flag, setFlag] = React.useState(false);
+	const [otp, setOtp] = React.useState('');
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setAge(event.target.value as string);
@@ -88,75 +91,141 @@ export const Send = () => {
 					</div>
 				</div>
 			</div>
-
-			<div className="main" style={{ marginTop: 80 }}>
-				<div style={{ display: 'flex', width: 320, justifyContent: 'space-between' }}>
-					<p style={{ fontSize: '18px' }}>Asset:</p>
-					<div style={{ display: 'flex', border: '1px solid #D7D8DC', borderRadius: 10, width: 200 }}>
-						<div style={{ alignSelf: 'center' }}>
-							<Avatar
-								sx={{ width: 55, height: 55 }}
-								src="https://download.logo.wine/logo/Ethereum/Ethereum-Logo.wine.png"
-							></Avatar>
+			{flag ? (
+				<div>
+					<div style={{ background: '#f2f4f7', height: 120, marginTop: 10 }}>
+						<button
+							style={{
+								background: 'transparent',
+								padding: 5,
+								marginLeft: -200,
+								marginTop: 20,
+								borderRadius: 8,
+								border: '1px solid lightgray',
+								color: 'gray'
+							}}
+						>
+							Sending Matic
+						</button>
+						<div style={{ marginLeft: -200, marginTop: -10 }}>
+							<h1 style={{ fontWeight: 500 }}>13.00</h1>
 						</div>
-
-						<div style={{ marginRight: 20 }}>
-							<p>Ethereum</p>
-							<p style={{ fontSize: '12px', marginTop: -10 }}>Balance:O ETH</p>
+					</div>
+					<div style={{ marginTop: 30, display: 'flex', width: '350px', justifyContent: 'space-evenly' }}>
+						<p>OTP:</p>
+						<TextField
+							id="outlined-password-input"
+							label="OTP"
+							type="text"
+							value={otp}
+							onChange={e => {
+								setOtp(e.target.value);
+							}}
+							size="large"
+						/>
+					</div>
+					<div
+						className="footer"
+						style={{
+							marginTop: 90
+						}}
+					>
+						<div style={{ display: 'flex', width: '350px', justifyContent: 'space-evenly', marginTop: 15 }}>
+							<Button
+								variant="outlined"
+								style={{ borderRadius: 20, width: 140, height: 40 }}
+								onClick={() => push('/profile')}
+							>
+								Reject
+							</Button>
+							<Button
+								variant="contained"
+								style={{ borderRadius: 20, width: 140, height: 40 }}
+								onClick={() => setFlag(true)}
+							>
+								Confirm
+							</Button>
 						</div>
 					</div>
 				</div>
-				<div style={{ display: 'flex', width: 320, justifyContent: 'space-between', marginTop: 20 }}>
-					<p style={{ fontSize: '18px' }}>Amount:</p>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							border: '1px solid #D7D8DC',
-							borderRadius: 10,
-							width: 200
-						}}
-					>
-						<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+			) : (
+				<div>
+					<div className="main" style={{ marginTop: 80 }}>
+						<div style={{ display: 'flex', width: 320, justifyContent: 'space-between' }}>
+							<p style={{ fontSize: '18px' }}>Asset:</p>
+							<div style={{ display: 'flex', border: '1px solid #D7D8DC', borderRadius: 10, width: 200 }}>
+								<div style={{ alignSelf: 'center' }}>
+									<Avatar
+										sx={{ width: 55, height: 55 }}
+										src="https://download.logo.wine/logo/Ethereum/Ethereum-Logo.wine.png"
+									></Avatar>
+								</div>
+
+								<div style={{ marginRight: 20 }}>
+									<p>Ethereum</p>
+									<p style={{ fontSize: '12px', marginTop: -10 }}>Balance:O ETH</p>
+								</div>
+							</div>
+						</div>
+						<div style={{ display: 'flex', width: 320, justifyContent: 'space-between', marginTop: 20 }}>
+							<p style={{ fontSize: '18px' }}>Amount:</p>
 							<div
 								style={{
 									display: 'flex',
-									justifyContent: 'space-between',
-									width: 180
+									flexDirection: 'column',
+									border: '1px solid #D7D8DC',
+									borderRadius: 10,
+									width: 200
 								}}
 							>
-								<p style={{ marginLeft: 12 }}>O ETH</p>
-								<button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>
-									<SwapVertIcon />
-								</button>
-							</div>
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											width: 180
+										}}
+									>
+										<p style={{ marginLeft: 12 }}>O ETH</p>
+										<button
+											style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+										>
+											<SwapVertIcon />
+										</button>
+									</div>
 
-							<p style={{ fontSize: '12px', marginTop: -10, marginLeft: 12 }}>
-								No Conversion rate available
-							</p>
+									<p style={{ fontSize: '12px', marginTop: -10, marginLeft: 12 }}>
+										No Conversion rate available
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div
+						className="footer"
+						style={{
+							marginTop: 90
+						}}
+					>
+						<div style={{ display: 'flex', width: '350px', justifyContent: 'space-evenly', marginTop: 15 }}>
+							<Button
+								variant="outlined"
+								style={{ borderRadius: 20, width: 140, height: 40 }}
+								onClick={() => push('/profile')}
+							>
+								Cancel
+							</Button>
+							<Button
+								variant="contained"
+								style={{ borderRadius: 20, width: 140, height: 40 }}
+								onClick={() => setFlag(true)}
+							>
+								Next
+							</Button>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div
-				className="footer"
-				style={{
-					marginTop: 90
-				}}
-			>
-				<div style={{ display: 'flex', width: '350px', justifyContent: 'space-evenly', marginTop: 15 }}>
-					<Button
-						variant="outlined"
-						style={{ borderRadius: 20, width: 140, height: 40 }}
-						onClick={() => push('/profile')}
-					>
-						Cancel
-					</Button>
-					<Button disabled variant="contained" style={{ borderRadius: 20, width: 140, height: 40 }}>
-						Next
-					</Button>
-				</div>
-			</div>
+			)}
 		</div>
 	);
 };

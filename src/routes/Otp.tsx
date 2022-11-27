@@ -4,12 +4,34 @@ import { ChromeMessage, Sender } from '../types';
 import { getCurrentTabUId, getCurrentTabUrl } from '../chrome/utils';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import CachedIcon from '@mui/icons-material/Cached';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-export const Home = () => {
+export const Otp = () => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState('');
+	const [otp, setOtp] = useState('');
+	const [account, setAccount] = React.useState('0x615f11359Bf78f10F8078257730362296A3fff1E');
+	const [open, setOpen] = React.useState({
+		id: '',
+		bool: false
+	});
+	const handleClick = id => {
+		setOpen({
+			id: id,
+			bool: true
+		});
+		navigator.clipboard.writeText(account);
+		setTimeout(
+			() =>
+				setOpen({
+					id: '',
+					bool: false
+				}),
+			1000
+		);
+	};
 
 	let { push } = useHistory();
 
@@ -51,9 +73,7 @@ export const Home = () => {
 	};
 
 	const submit = () => {
-		if (password === confirmPassword) {
-			push('/profile');
-		}
+		push('/password');
 	};
 
 	return (
@@ -64,23 +84,48 @@ export const Home = () => {
 					className="logo"
 				/>
 				<p className="title">Dwallet</p>
-				<div className="password-container">
+				<div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', height: 220 }}>
+					<div>
+						<TextField
+							id="outlined-password-input"
+							label="Phone Number"
+							type="text"
+							value={phoneNumber}
+							onChange={e => {
+								setPhoneNumber(e.target.value);
+							}}
+							size="small"
+						/>
+					</div>
 					<Button
 						variant="contained"
 						className="submit-button"
-						onClick={() => push('/key')}
-						sx={{ borderRadius: 10 }}
+						onClick={() => console.log('send otp')}
+						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
 					>
-						Create Wallet
+						Set Otp
 					</Button>
-					<p style={{ color: 'black', fontSize: '18px' }}>or</p>
+
+					<div>
+						<TextField
+							id="outlined-password-input"
+							label="Otp"
+							type="text"
+							value={otp}
+							onChange={e => {
+								setOtp(e.target.value);
+							}}
+							size="small"
+						/>
+					</div>
+
 					<Button
 						variant="contained"
 						className="submit-button"
-						onClick={() => console.log('Load Wallet')}
-						sx={{ borderRadius: 10 }}
+						onClick={submit}
+						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
 					>
-						Load Wallet
+						Verify
 					</Button>
 				</div>
 			</header>

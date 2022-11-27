@@ -37,12 +37,7 @@
 	color: black;
 	font-size: 30px;
 }
-.password-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 180px;
-}
+
 .submit-button {
 	border-color: 'grey';
 	color: 'black';
