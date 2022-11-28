@@ -21,12 +21,22 @@ import TextField from '@mui/material/TextField';
 const account = '0x615f11359Bf78f10F8078257730362296A3fff1E';
 export const Send = () => {
 	let { push } = useHistory();
-	const [age, setAge] = React.useState('');
+	const [network, setNetwork] = React.useState(20);
+	const [address, setAddress] = React.useState('');
+	const [amount, setAmount] = React.useState(0);
 	const [flag, setFlag] = React.useState(false);
 	const [otp, setOtp] = React.useState('');
 
 	const handleChange = (event: SelectChangeEvent) => {
-		setAge(event.target.value as string);
+		setNetwork(event.target.value);
+	};
+
+	const handleAddress = (event: any) => {
+		setAddress(event.target.value);
+	};
+
+	const handleAmount = (event: any) => {
+		setAmount(event.target.value);
 	};
 
 	const [open, setOpen] = React.useState(false);
@@ -44,20 +54,20 @@ export const Send = () => {
 						style={{ width: '46px', height: '46px' }}
 					/>
 					<FormControl sx={{ minWidth: 190 }}>
-						<InputLabel id="demo-simple-select-label">Network</InputLabel>
-						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={age}
-							label="Age"
-							onChange={handleChange}
-							sx={{ borderRadius: 8, height: 50 }}
-						>
-							<MenuItem value={10}>Polygon Mainnet</MenuItem>
-							<MenuItem value={20}>Ethereum</MenuItem>
-							<MenuItem value={30}>Rinkeby</MenuItem>
-						</Select>
-					</FormControl>
+					<InputLabel id="demo-simple-select-label">Network</InputLabel>
+					<Select
+						labelId="demo-simple-select-label"
+						id="demo-simple-select"
+						value={network}
+						label="Network"
+						onChange={handleChange}
+						sx={{ borderRadius: 8, height: 50 }}
+					>
+						<MenuItem value={10}>Polygon Mainnet</MenuItem>
+						<MenuItem value={20}>Ethereum</MenuItem>
+						<MenuItem value={30}>Rinkeby</MenuItem>
+					</Select>
+				</FormControl>
 					<Avatar
 						sx={{ width: 46, height: 46 }}
 						src="https://ih1.redbubble.net/image.3955829690.9229/st,small,507x507-pad,600x600,f8f8f8.jpg"
@@ -74,8 +84,8 @@ export const Send = () => {
 							borderRadius: '10px'
 						}}
 					>
-						<p style={{ color: '#1876D1', fontSize: '15px' }}>Account 1</p>
-						<p style={{ fontSize: '12px' }}>0x615f11359Bf78f10F8078257730362296A3fff1E</p>
+						<p style={{ color: '#1876D1', fontSize: '15px' }}>To:</p>
+						<input value={address} onChange={handleAddress} style={{ fontSize: '12px' ,width:"90%", height:"20px", outline:"none",border:"0px"}} placeholder="0x615f11359Bf78f10F80782577....."></input>
 						<button
 							style={{
 								position: 'absolute',
@@ -105,10 +115,10 @@ export const Send = () => {
 								color: 'gray'
 							}}
 						>
-							Sending Matic
+							Sending ETH
 						</button>
 						<div style={{ marginLeft: -200, marginTop: -10 }}>
-							<h1 style={{ fontWeight: 500 }}>13.00</h1>
+							<h1 style={{ fontWeight: 500 }}>{amount}</h1>
 						</div>
 					</div>
 					<div style={{ marginTop: 30, display: 'flex', width: '350px', justifyContent: 'space-evenly' }}>
@@ -186,7 +196,7 @@ export const Send = () => {
 											width: 180
 										}}
 									>
-										<p style={{ marginLeft: 12 }}>O ETH</p>
+										<input type="number" style={{ marginLeft: 12, fontSize: '12px' ,width:"90%", height:"20px", outline:"none",border:"0px" }} value={amount} onChange={handleAmount}></input> ETH
 										<button
 											style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
 										>

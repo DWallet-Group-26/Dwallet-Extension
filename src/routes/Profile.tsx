@@ -20,7 +20,7 @@ import {ethers} from 'ethers';
 
 export const Profile = (props) => {
 	let { push } = useHistory();
-	const [network, setNetwork] = React.useState('');
+	const [network, setNetwork] = React.useState(20);
 	const [mainkeyaddr, setMainkeyaddr] = React.useState(get_address(props.privateKey));
 	const [multiwalletaddr, setMultiwalletaddr] = React.useState("loading...");
 	const [multisigwalletbal, setMultisigwalletbal] = React.useState(0);
@@ -71,7 +71,7 @@ export const Profile = (props) => {
 					<Select
 						labelId="demo-simple-select-label"
 						id="demo-simple-select"
-						value={20}
+						value={network}
 						label="Network"
 						onChange={handleChange}
 						sx={{ borderRadius: 8, height: 50 }}
