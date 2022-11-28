@@ -5,11 +5,10 @@ import { getCurrentTabUId, getCurrentTabUrl } from '../chrome/utils';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-export const Password = (props) => {
+export const Login = (props) => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
 	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
 
 	let { push } = useHistory();
 
@@ -51,8 +50,8 @@ export const Password = (props) => {
 	};
 
 	const submit = () => {
-		if (password === confirmPassword) {
-			props.set_password(password);
+		let result = props.check_password(password);
+		if (result) {
 			push('/profile');
 		}
 	};
@@ -78,26 +77,14 @@ export const Password = (props) => {
 						size="small"
 					/>
 
-					<TextField
-						id="outlined-password-input"
-						label="Confirm Password"
-						type="password"
-						autoComplete="current-password"
-						value={confirmPassword}
-						onChange={e => {
-							setConfirmPassword(e.target.value);
-						}}
-						size="small"
-					/>
-
 					<Button
 						variant="contained"
 						className="submit-button"
 						onClick={submit}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
-						{...(!(password.length>=8 && password==confirmPassword) ? { disabled: true } : {})}
+						{...(!(password.length>=8) ? { disabled: true } : {})}
 					>
-						Create
+						Login
 					</Button>
 				</div>
 			</header>

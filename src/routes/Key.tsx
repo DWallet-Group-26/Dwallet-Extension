@@ -84,7 +84,7 @@ export const Key = (props) => {
 		const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
 		const wallet = new ethers.Wallet(mainKey, provider);
 		const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
-		fetch("http://localhost:5000/api/dwallet/serveraddress").then(res => res.json()).then( async (serveraddr) => {
+		fetch(process.env.REACT_APP_SERVER + "/api/dwallet/serveraddress").then(res => res.json()).then( async (serveraddr) => {
 			serveraddr = serveraddr.address;
 			await factory.createWallet(mainaddr, backupaddr, serveraddr);
 			console.log("wallet created");

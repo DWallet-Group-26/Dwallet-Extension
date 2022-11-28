@@ -79,7 +79,7 @@ export const Otp = (props) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ "publicKey":  get_address(props.privateKey), "otp": otp})
 		};
-		fetch('http://localhost:5000/api/dwallet/verifyphone', requestOptions)
+		fetch(process.env.REACT_APP_SERVER + '/api/dwallet/verifyphone', requestOptions)
 			.then(response => {
 				console.log(response.text)
 				push('/password');
@@ -117,12 +117,12 @@ export const Otp = (props) => {
 								headers: { 'Content-Type': 'application/json' },
 								body: JSON.stringify({ "phone": phoneNumber, "publicKey":  get_address(props.privateKey)})
 							};
-							fetch('http://localhost:5000/api/dwallet/createwallet', requestOptions)
+							fetch(process.env.REACT_APP_SERVER + '/api/dwallet/createwallet', requestOptions)
 								.then(response => console.log(response.text()));
 						}}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
 					>
-						Set Otp
+						Send Otp
 					</Button>
 
 					<div>
