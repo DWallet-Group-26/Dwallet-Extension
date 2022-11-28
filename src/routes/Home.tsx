@@ -3,13 +3,22 @@ import { useHistory } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-export const Home = () => {
+export const Home = (props) => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
 	let { push } = useHistory();
+
+	useEffect(() => {
+		console.log('Home mounted');
+		for(let i=0;i<props.redirect_paths.length;i++){
+			if(props.redirect_paths[i][0]){
+				push(props.redirect_paths[i][1]);
+			}
+		}
+	})
 
 	
 
