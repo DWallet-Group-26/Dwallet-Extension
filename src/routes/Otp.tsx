@@ -6,8 +6,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CachedIcon from '@mui/icons-material/Cached';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { generate_private_key, get_address } from '../functions';
 
-export const Otp = () => {
+export const Otp = (props) => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
 	const [phoneNumber, setPhoneNumber] = useState('');
@@ -73,7 +74,17 @@ export const Otp = () => {
 	};
 
 	const submit = () => {
-		push('/password');
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ "publicKey":  get_address(props.privateKey), "otp": otp})
+		};
+		fetch('http://localhost:5000/api/dwallet/verifyphone', requestOptions)
+			.then(response => {
+				console.log(response.text)
+				push('/password');
+			});
+		
 	};
 
 	return (
@@ -100,7 +111,15 @@ export const Otp = () => {
 					<Button
 						variant="contained"
 						className="submit-button"
-						onClick={() => console.log('send otp')}
+						onClick={() => {
+							const requestOptions = {
+								method: 'POST',
+								headers: { 'Content-Type': 'application/json' },
+								body: JSON.stringify({ "phone": phoneNumber, "publicKey":  get_address(props.privateKey)})
+							};
+							fetch('http://localhost:5000/api/dwallet/createwallet', requestOptions)
+								.then(response => console.log(response.text()));
+						}}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
 					>
 						Set Otp

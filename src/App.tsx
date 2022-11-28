@@ -13,7 +13,7 @@ class App extends React.Component {
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			privateKey: null,
+			privateKey: "df57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e",
 			privateKeyEncrypted: true,
 			login: false,
 			loading: true,
@@ -63,7 +63,7 @@ class App extends React.Component {
 					<Key set_private_key={this.set_private_key}/>
 				</Route>
 				<Route path="/otp">
-					<Otp />
+					<Otp privateKey={this.state.privateKey}/>
 				</Route>
 				<Route path="/">
 					<Home />
