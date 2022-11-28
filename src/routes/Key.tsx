@@ -6,23 +6,29 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CachedIcon from '@mui/icons-material/Cached';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { generate_private_key, get_address } from '../functions';
+import {ethers} from 'ethers';
 
-export const Key = () => {
+const FACTORY_ABI = require('../ABI/MultiSigWalletFactory.json').abi;
+const WALLET_ABI = require('../ABI/MultiSigWallet.json').abi;
+
+export const Key = (props) => {
 	const [url, setUrl] = useState<string>('');
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
 	const [mainKey, setMainKey] = useState('');
 	const [backupKey, setBackupKey] = useState('');
-	const [account, setAccount] = React.useState('0x615f11359Bf78f10F8078257730362296A3fff1E');
+	const [mainaddr, setMainaddr] = React.useState('');
+	const [backupaddr, setBackupaddr] = React.useState('');
 	const [open, setOpen] = React.useState({
 		id: '',
 		bool: false
 	});
-	const handleClick = id => {
+	const handleClick = (id,addr) => {
 		setOpen({
 			id: id,
 			bool: true
 		});
-		navigator.clipboard.writeText(account);
+		navigator.clipboard.writeText(addr);
 		setTimeout(
 			() =>
 				setOpen({
@@ -72,8 +78,19 @@ export const Key = () => {
 		});
 	};
 
-	const submit = () => {
-		push('/otp');
+	const submit = async () => {
+		props.set_private_key(mainKey);
+
+		const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
+		const wallet = new ethers.Wallet(mainKey, provider);
+		const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
+		fetch("http://localhost:5000/api/dwallet/serveraddress").then(res => res.json()).then( async (serveraddr) => {
+			serveraddr = serveraddr.address;
+			await factory.createWallet(mainaddr, backupaddr, serveraddr);
+			console.log("wallet created");
+			push('/otp');
+	})
+		
 	};
 
 	return (
@@ -93,21 +110,26 @@ export const Key = () => {
 							value={mainKey}
 							onChange={e => {
 								setMainKey(e.target.value);
+								try{setMainaddr(get_address(e.target.value))}catch{setMainaddr('')}
 							}}
 							size="small"
 						/>
 						<CachedIcon
 							style={{ color: 'black', marginLeft: 30, cursor: 'pointer' }}
-							onClick={() => setMainKey('')}
+							onClick={() =>{
+								let key = generate_private_key();
+								setMainKey(key);
+								try{setMainaddr(get_address(key))}catch{setMainaddr('')}
+							}}
 						/>
 					</div>
 					<div style={{ marginTop: -12, display: 'flex', justifyContent: 'space-between', width: '130px' }}>
 						<span style={{ color: 'black', fontSize: '12px' }}>address:</span>
 						<span style={{ color: 'gray', fontSize: '12px', marginLeft: '20px' }}>
-							{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
+							{mainaddr.substring(0, 4) + '...' + mainaddr.substring(mainaddr.length - 4, mainaddr.length)}
 						</span>
 						<button
-							onClick={() => handleClick('1')}
+							onClick={() => handleClick('1',mainaddr)}
 							style={{
 								border: 'none',
 								background: 'transparent',
@@ -129,22 +151,27 @@ export const Key = () => {
 							value={backupKey}
 							onChange={e => {
 								setBackupKey(e.target.value);
+								try{setBackupaddr(get_address(e.target.value))}catch{setBackupaddr('')}
 							}}
 							size="small"
 						/>
 
 						<CachedIcon
 							style={{ color: 'black', marginLeft: 30, cursor: 'pointer' }}
-							onClick={() => setBackupKey('')}
+							onClick={() => {
+								let key = generate_private_key();
+								setBackupKey(key);
+								try{setBackupaddr(get_address(key))}catch{setBackupaddr('')}
+							}}
 						/>
 					</div>
 					<div style={{ marginTop: -12, display: 'flex', justifyContent: 'space-between', width: '130px' }}>
 						<span style={{ color: 'black', fontSize: '12px' }}>address:</span>
 						<span style={{ color: 'gray', fontSize: '12px', marginLeft: '20px' }}>
-							{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
+							{backupaddr.substring(0, 4) + '...' + backupaddr.substring(backupaddr.length - 4, backupaddr.length)}
 						</span>
 						<button
-							onClick={() => handleClick('2')}
+							onClick={() => handleClick('2',backupaddr)}
 							style={{
 								border: 'none',
 								background: 'transparent',
@@ -163,6 +190,7 @@ export const Key = () => {
 						className="submit-button"
 						onClick={submit}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
+						{...(!mainaddr || !backupaddr ? { disabled: true } : {})}
 					>
 						Confirm
 					</Button>
