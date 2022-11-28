@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ChromeMessage, Sender } from '../types';
-import { getCurrentTabUId, getCurrentTabUrl } from '../chrome/utils';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
@@ -13,42 +11,7 @@ export const Home = () => {
 
 	let { push } = useHistory();
 
-	/**
-	 * Get current URL
-	 */
-	useEffect(() => {
-		getCurrentTabUrl(url => {
-			setUrl(url || 'undefined');
-		});
-	}, []);
-
-	const sendTestMessage = () => {
-		const message: ChromeMessage = {
-			from: Sender.React,
-			message: 'Hello from React'
-		};
-
-		getCurrentTabUId(id => {
-			id &&
-				chrome.tabs.sendMessage(id, message, responseFromContentScript => {
-					setResponseFromContent(responseFromContentScript);
-				});
-		});
-	};
-
-	const sendRemoveMessage = () => {
-		const message: ChromeMessage = {
-			from: Sender.React,
-			message: 'delete logo'
-		};
-
-		getCurrentTabUId(id => {
-			id &&
-				chrome.tabs.sendMessage(id, message, response => {
-					setResponseFromContent(response);
-				});
-		});
-	};
+	
 
 	const submit = () => {
 		if (password === confirmPassword) {

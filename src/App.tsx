@@ -16,9 +16,11 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			privateKey: "df57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e", // temporary for testing (actial value null)
-			password: "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f", // temporary for testing (actual value null)
 			privateKeyEncrypted: true,
+			password: "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f", // temporary for testing (actual value null)
+
 			login: false,
+			created_wallet: false,
 			loading: true,
 		}
 		this.set_private_key = this.set_private_key.bind(this);
@@ -26,29 +28,30 @@ class App extends React.Component {
 		this.check_password = this.check_password.bind(this);
 	}
 
-	privateKeyCheck(): boolean {
-		// chrome.storage.local.get('privateKey', function (result) {
-		// 	console.log('Value currently is ' + result);
-		// 	if (result.privateKey == null) {
-		// 		return false;
-		// 	}
-		// 	else {
-		// 		return true;
-		// 	}
-		// });
-		return false;
-	}
-
 	componentDidMount(): void { // set loading to false, checks private key exists (if not create wallet page), if it does, load login page
 		console.log("App mounted");
-		// console.log("App mounted");
+		let wallet_created = false;
+		let privateKey = null;
+		let password = null;
+		
+		// chrome.storage.local.set({ "privateKey": "test" }, function () {
+		// 	console.log("private key set");
+		// });
+		// chrome.storage.local.get(["privateKey"], function (result) {
+		// 	console.log("private key retrieved");
+		// 	console.log(result);
+		// });
+		
+		// 	wallet_created = true
+		// } catch (e) {}
+		this.setState({ loading: false,wallet_created: wallet_created });
 		// if (!this.privateKeyCheck()) {
 		// 	console.log("No private key found");
 		// }
 
 	}
 
-	componentWillUnmount(): void {
+	componentWillUnmount(): void { // save private key, password hash to chrome storage
 		console.log("App unmounted");
 
 	}
@@ -58,6 +61,7 @@ class App extends React.Component {
 	}
 	
 	set_password(password: string) {
+		// encrypt private key
 		this.setState({ password: crypto.SHA256(password).toString() });
 	}
 
@@ -72,25 +76,38 @@ class App extends React.Component {
 	}
 
 	  render() {
+		if (this.state.loading) {
+			return (
+				<div className="App">
+					<h1>Loading...</h1>
+				</div>
+			);
+		}
 		return (
 			<Switch>
-				<Route path="/profile">
-					<Profile />
-				</Route>
-				<Route path="/send">
-					<Send />
-				</Route>
+				{this.state.login && (<>
+					<Route path="/profile">
+						<Profile />
+					</Route>
+					<Route path="/send">
+						<Send />
+					</Route>
+					</>
+				)}
+				{this.state.created_wallet && (<>
+					<Route path="/login">
+						<Login check_password={this.check_password}/>
+					</Route>
+					</>)
+				}
 				<Route path="/password">
 					<Password set_password={this.set_password}/>
-				</Route>
-				<Route path="/key">
-					<Key set_private_key={this.set_private_key}/>
 				</Route>
 				<Route path="/otp">
 					<Otp privateKey={this.state.privateKey}/>
 				</Route>
-				<Route path="/login">
-					<Login check_password={this.check_password}/>
+				<Route path="/key">
+					<Key set_private_key={this.set_private_key}/>
 				</Route>
 				<Route path="/">
 					<Home/>
