@@ -15,9 +15,9 @@ class App extends React.Component {
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			privateKey: "df57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e", // temporary for testing (actial value null)
+			privateKey: null,
 			privateKeyEncrypted: true,
-			password: "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f", // temporary for testing (actual value null)
+			password: null,
 
 			login: false,
 			created_wallet: false,
@@ -28,30 +28,32 @@ class App extends React.Component {
 		this.check_password = this.check_password.bind(this);
 	}
 
-	componentDidMount(): void { // set loading to false, checks private key exists (if not create wallet page), if it does, load login page
+	componentDidMount(): void {
 		console.log("App mounted");
 		let wallet_created = false;
 		let privateKey = null;
 		let password = null;
-		
-		// chrome.storage.local.set({ "privateKey": "test" }, function () {
-		// 	console.log("private key set");
-		// });
-		// chrome.storage.local.get(["privateKey"], function (result) {
-		// 	console.log("private key retrieved");
-		// 	console.log(result);
-		// });
-		
-		// 	wallet_created = true
-		// } catch (e) {}
-		this.setState({ loading: false,wallet_created: wallet_created });
-		// if (!this.privateKeyCheck()) {
-		// 	console.log("No private key found");
-		// }
+	
+		try {chrome.storage.local.get(["privateKey"], function (result) {
+			if (result.privateKey!=undefined){
+				wallet_created = true;
+				privateKey = result.privateKey;
+			}
+		});
+		chrome.storage.local.get(["password"], function (result) {
+			if (result.password!=undefined){
+				password = result.password;
+			}
+		});}
+		catch (e) {
+			console.log("Error: " + e);
+		}
+
+		this.setState({ loading: false,wallet_created: wallet_created,privateKey: privateKey,password: password });
 
 	}
 
-	componentWillUnmount(): void { // save private key, password hash to chrome storage
+	componentWillUnmount(): void {
 		console.log("App unmounted");
 
 	}
@@ -61,13 +63,22 @@ class App extends React.Component {
 	}
 	
 	set_password(password: string) {
-		// encrypt private key
-		this.setState({ password: crypto.SHA256(password).toString() });
+		try {chrome.storage.local.set({ password: crypto.SHA256(password).toString() }, function () {
+			console.log('Password is hashed and stored');
+		});
+		chrome.storage.local.set({ "privateKey": crypto.AES.encrypt(this.state.privateKey,password).toString() }, function () {
+			console.log('Private key is encrypted and stored');
+		});}
+		catch (e) {
+			console.log("Error: " + e);
+		}
+		this.setState({ password: crypto.SHA256(password).toString(), privateKeyEncrypted: false, created_wallet: true, login: true });
 	}
 
 	check_password(password: string): boolean {
 		if (this.state.password == crypto.SHA256(password).toString()) {
-			// decrypt private key
+			let key = crypto.AES.decrypt(this.state.privateKey,password).toString(crypto.enc.Utf8);
+			this.setState({ privateKeyEncrypted: false, login: true, privateKey: key});
 			return true;
 		}
 		else {
