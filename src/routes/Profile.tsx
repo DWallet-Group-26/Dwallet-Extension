@@ -1,4 +1,5 @@
 import React from 'react';
+import {useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,26 +15,40 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {get_balance, get_multi_sig_address,get_address} from '../functions';
+import {ethers} from 'ethers';
 
-export const Profile = () => {
+export const Profile = (props) => {
 	let { push } = useHistory();
-	const [age, setAge] = React.useState('');
-	const [account, setAccount] = React.useState('0x615f11359Bf78f10F8078257730362296A3fff1E');
+	const [network, setNetwork] = React.useState('');
+	const [mainkeyaddr, setMainkeyaddr] = React.useState(get_address(props.privateKey));
+	const [multiwalletaddr, setMultiwalletaddr] = React.useState("loading...");
+	const [multisigwalletbal, setMultisigwalletbal] = React.useState(0);
+	const [mainwalletbal, setMainwalletbal] = React.useState(0);
+
+	useEffect(async() => {
+		let addr = await get_multi_sig_address(props.privateKey,mainkeyaddr)
+		setMultiwalletaddr(addr);
+		let multisigbal = ethers.utils.formatEther(await get_balance(addr))
+		setMultisigwalletbal(multisigbal.substring(0,6));
+		let mainbal = ethers.utils.formatEther(await get_balance(mainkeyaddr))
+		setMainwalletbal(mainbal.substring(0,6));
+	}, []);
 
 	const handleChange = (event: SelectChangeEvent) => {
-		setAge(event.target.value as string);
+		setNetwork(event.target.value);
 	};
 
 	const [open, setOpen] = React.useState({
 		id: '',
 		bool: false
 	});
-	const handleClick = id => {
+	const handleClick = (id,addr) => {
 		setOpen({
 			id: id,
 			bool: true
 		});
-		navigator.clipboard.writeText(account);
+		navigator.clipboard.writeText(addr);
 		setTimeout(
 			() =>
 				setOpen({
@@ -56,8 +71,8 @@ export const Profile = () => {
 					<Select
 						labelId="demo-simple-select-label"
 						id="demo-simple-select"
-						value={age}
-						label="Age"
+						value={20}
+						label="Network"
 						onChange={handleChange}
 						sx={{ borderRadius: 8, height: 50 }}
 					>
@@ -68,7 +83,7 @@ export const Profile = () => {
 				</FormControl>
 				<Avatar
 					sx={{ width: 46, height: 46 }}
-					src="https://ih1.redbubble.net/image.3955829690.9229/st,small,507x507-pad,600x600,f8f8f8.jpg"
+					src="./profile.png"
 				></Avatar>
 			</header>
 			<div className="sub-header">
@@ -79,10 +94,10 @@ export const Profile = () => {
 				<div style={{ marginTop: -10 }}>
 					<h4 style={{ marginLeft: -50 }}>Account 1</h4>
 					<span style={{ position: 'absolute', top: 130, left: 150, fontSize: '13px' }}>
-						{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
+						{multiwalletaddr.substring(0, 4) + '...' + multiwalletaddr.substring(multiwalletaddr.length - 4, multiwalletaddr.length)}
 					</span>
 					<button
-						onClick={() => handleClick(1)}
+						onClick={() => handleClick(1, multiwalletaddr)}
 						style={{
 							position: 'absolute',
 							top: 130,
@@ -110,7 +125,7 @@ export const Profile = () => {
 					></Avatar>
 				</div>
 				<div>
-					<h1 style={{ fontWeight: 400 }}>0 ETH</h1>
+					<h1 style={{ fontWeight: 400 }}>{multisigwalletbal} ETH</h1>
 				</div>
 				<div className="btn-container" style={{ marginTop: 40 }}>
 					<button
@@ -162,10 +177,10 @@ export const Profile = () => {
 					<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
 						<p>Gas fee Address</p>
 						<p style={{ color: 'grey' }}>
-							{account.substring(0, 4) + '...' + account.substring(account.length - 4, account.length)}
+							{mainkeyaddr.substring(0, 4) + '...' + mainkeyaddr.substring(mainkeyaddr.length - 4, mainkeyaddr.length)}
 						</p>
 						<button
-							onClick={() => handleClick('2')}
+							onClick={() => handleClick(2,mainkeyaddr)}
 							style={{
 								border: 'none',
 								background: 'transparent',
@@ -194,7 +209,7 @@ export const Profile = () => {
 								sx={{ width: 43, height: 43 }}
 								src="https://download.logo.wine/logo/Ethereum/Ethereum-Logo.wine.png"
 							></Avatar>
-							<h3 style={{ fontWeight: 400 }}>O ETH</h3>
+							<h3 style={{ fontWeight: 400 }}>{mainwalletbal} ETH</h3>
 						</div>
 
 						<button
