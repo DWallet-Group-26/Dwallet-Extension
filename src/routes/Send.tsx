@@ -47,7 +47,7 @@ export const Send = () => {
 
 	return (
 		<div className="App">
-			<div className="header">
+			<div className="header" style={{width:"350px",margin:"auto"}}>
 				<header className="main-page-header" style={{ height: 80 }}>
 					<img
 						src="https://media.istockphoto.com/id/1125625274/vector/unique-modern-creative-elegant-letter-d-based-vector-icon-logo-template.jpg?s=612x612&w=0&k=20&c=CAl475WFm2ErEgh1BjzlqFG95sADQ1OetS6pJsOTEOA="
@@ -84,13 +84,11 @@ export const Send = () => {
 							borderRadius: '10px'
 						}}
 					>
-						<p style={{ color: '#1876D1', fontSize: '15px' }}>To:</p>
-						<input value={address} onChange={handleAddress} style={{ fontSize: '12px' ,width:"90%", height:"20px", outline:"none",border:"0px"}} placeholder="0x615f11359Bf78f10F80782577....."></input>
+						<p style={{ color: '#1876D1', fontSize: '15px', textAlign:"left",marginLeft:"10px",marginBottom:"0px" }}>To:</p>
+						<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px"}}>
+						<input value={address} onChange={handleAddress} style={{ fontSize: '12px' ,width:"200px", height:"20px", outline:"none",border:"0px",display:"inline"}} placeholder="0x615f11359Bf78f10F80782577....."></input>
 						<button
 							style={{
-								position: 'absolute',
-								top: 140,
-								left: 300,
 								cursor: 'pointer',
 								border: 'none',
 								background: 'transparent'
@@ -98,11 +96,13 @@ export const Send = () => {
 						>
 							<CloseIcon />
 						</button>
+						</div>
 					</div>
 				</div>
 			</div>
+			<div style={{width:"350px",margin:"auto"}}>
 			{flag ? (
-				<div>
+				<>
 					<div style={{ background: '#f2f4f7', height: 120, marginTop: 10 }}>
 						<button
 							style={{
@@ -157,9 +157,9 @@ export const Send = () => {
 							</Button>
 						</div>
 					</div>
-				</div>
+				</>
 			) : (
-				<div>
+				<>
 					<div className="main" style={{ marginTop: 80 }}>
 						<div style={{ display: 'flex', width: 320, justifyContent: 'space-between' }}>
 							<p style={{ fontSize: '18px' }}>Asset:</p>
@@ -188,7 +188,7 @@ export const Send = () => {
 									width: 200
 								}}
 							>
-								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop:"10px" }}>
 									<div
 										style={{
 											display: 'flex',
@@ -234,8 +234,9 @@ export const Send = () => {
 							</Button>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
+			</div>
 		</div>
 	);
 };

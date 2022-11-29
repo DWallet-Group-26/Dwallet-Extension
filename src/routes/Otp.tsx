@@ -82,6 +82,7 @@ export const Otp = (props) => {
 								.then(response => console.log(response.text()));
 						}}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
+						{...(!(phoneNumber.length == 13 && phoneNumber.startsWith("+91")) && { disabled: true })}
 					>
 						Send Otp
 					</Button>
@@ -104,6 +105,7 @@ export const Otp = (props) => {
 						className="submit-button"
 						onClick={submit}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
+						{...((otp.length != 6) && { disabled: true })}
 					>
 						Verify
 					</Button>

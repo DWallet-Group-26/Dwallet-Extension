@@ -22,17 +22,23 @@ export const Profile = (props) => {
 	let { push } = useHistory();
 	const [network, setNetwork] = React.useState(20);
 	const [mainkeyaddr, setMainkeyaddr] = React.useState(get_address(props.privateKey));
-	const [multiwalletaddr, setMultiwalletaddr] = React.useState("loading...");
+	const [multiwalletaddr, setMultiwalletaddr] = React.useState("loading");
 	const [multisigwalletbal, setMultisigwalletbal] = React.useState(0);
 	const [mainwalletbal, setMainwalletbal] = React.useState(0);
 
 	useEffect(async() => {
-		let addr = await get_multi_sig_address(props.privateKey,mainkeyaddr)
-		setMultiwalletaddr(addr);
-		let multisigbal = ethers.utils.formatEther(await get_balance(addr))
-		setMultisigwalletbal(multisigbal.substring(0,6));
-		let mainbal = ethers.utils.formatEther(await get_balance(mainkeyaddr))
-		setMainwalletbal(mainbal.substring(0,6));
+		try{
+			let addr = await get_multi_sig_address(props.privateKey,mainkeyaddr)
+			setMultiwalletaddr(addr);
+			let multisigbal = ethers.utils.formatEther(await get_balance(addr))
+			setMultisigwalletbal(multisigbal.substring(0,6));
+			let mainbal = ethers.utils.formatEther(await get_balance(mainkeyaddr))
+			setMainwalletbal(mainbal.substring(0,6));
+		}
+		catch(e){
+			console.log(e)
+		}
+
 	}, []);
 
 	const handleChange = (event: SelectChangeEvent) => {
@@ -60,7 +66,7 @@ export const Profile = (props) => {
 	};
 
 	return (
-		<div className="App">
+		<div className="App" style={{ width:"350px", margin:"auto"}}>
 			<header className="main-page-header" style={{ height: 80 }}>
 				<img
 					src="https://media.istockphoto.com/id/1125625274/vector/unique-modern-creative-elegant-letter-d-based-vector-icon-logo-template.jpg?s=612x612&w=0&k=20&c=CAl475WFm2ErEgh1BjzlqFG95sADQ1OetS6pJsOTEOA="
@@ -91,17 +97,15 @@ export const Profile = (props) => {
 					<Radio size="1" label="not" />
 					<span>not connected</span>
 				</div>
-				<div style={{ marginTop: -10 }}>
-					<h4 style={{ marginLeft: -50 }}>Account 1</h4>
-					<span style={{ position: 'absolute', top: 130, left: 150, fontSize: '13px' }}>
+				<div style={{ marginTop: -10, textAlign:"center" }}>
+					<b style={{}}>Account 1</b><br/>
+					<span style={{  fontSize: '13px' }}>
 						{multiwalletaddr.substring(0, 4) + '...' + multiwalletaddr.substring(multiwalletaddr.length - 4, multiwalletaddr.length)}
 					</span>
 					<button
 						onClick={() => handleClick(1, multiwalletaddr)}
 						style={{
-							position: 'absolute',
-							top: 130,
-							left: 210,
+							
 							border: 'none',
 							background: 'transparent',
 							cursor: 'pointer'
@@ -113,8 +117,8 @@ export const Profile = (props) => {
 						)}
 					</button>
 				</div>
-				<div>
-					<MoreVertIcon style={{ cursor: 'pointer' }} />
+				<div style={{width:"80px"}}>
+					<MoreVertIcon style={{  float:"right",cursor: 'pointer' }} />
 				</div>
 			</div>
 			<div className="main" style={{ marginTop: 10 }}>
