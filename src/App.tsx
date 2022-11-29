@@ -26,15 +26,6 @@ const readLocalStorage = async (key) => {
 class App extends React.Component {
 	constructor(props: any) {
 		super(props);
-		// this.state = { // for testing
-		// 	privateKey: "U2FsdGVkX1+WtzmM79U8gQf7Mn7ZZv8c5JFb62BxiSm0gSV4r+wfZDbQouTmh2IWBIx5KQ/nycbXhI0bk4ciHXm887GuC5h7eHYrbaQrxY+vdAjdJXtPAuOnontS9Kv/",
-		// 	privateKeyEncrypted: true,
-		// 	password: "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
-
-		// 	login: false,
-		// 	created_wallet: true,
-		// 	loading: true,
-		// }
 		this.state = {
 			privateKey: null,
 			privateKeyEncrypted: true,
@@ -92,6 +83,7 @@ class App extends React.Component {
 	check_password(password: string): boolean {
 		if (this.state.password == crypto.SHA256(password).toString()) {
 			let key = crypto.AES.decrypt(this.state.privateKey,password).toString(crypto.enc.Utf8);
+			// console.log("key: " + key);
 			this.setState({ privateKeyEncrypted: false, login: true, privateKey: key});
 			return true;
 		}
@@ -112,11 +104,11 @@ class App extends React.Component {
 			<Switch>
 				{this.state.login && (
 					<Route path="/profile">
-						<Profile />
+						<Profile privateKey={this.state.privateKey}/>
 					</Route>)}
 				{this.state.login && (
 					<Route path="/send">
-						<Send />
+						<Send privateKey={this.state.privateKey}/>
 					</Route>
 				)}
 				{this.state.created_wallet && (

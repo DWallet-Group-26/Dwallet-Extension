@@ -34,3 +34,23 @@ export const get_balance = async (address) => {
     let balance = await provider.getBalance(address);
     return balance;
 }
+
+export const address_valid = (address) => {
+    try {
+        ethers.utils.getAddress(address);
+        return true;
+    } catch (e) {
+        return false;
+    }
+
+}
+
+export const create_transaction = async (mainKey, address, amount) => {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
+    const wallet = new ethers.Wallet(mainKey, provider);
+    let multisigaddr = await get_multi_sig_address(mainKey, get_address(mainKey));
+    const multisig = new ethers.Contract(multisigaddr, WALLET_ABI, wallet);
+    let txid = await multisig.getTransactionCount();
+    await multisig.submitTransaction(address, amount);
+    return txid.toNumber();
+}
