@@ -3,6 +3,11 @@ import { useHistory } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem'
+import { generate_private_key, get_address } from '../functions';
+import {ethers} from 'ethers';
+
+const FACTORY_ABI = require('../ABI/MultiSigWalletFactory.json').abi;
+const WALLET_ABI = require('../ABI/MultiSigWallet.json').abi;
 
 export const LoadWallet = (props) => {
 	const [responseFromContent, setResponseFromContent] = useState<string>('');
@@ -22,9 +27,30 @@ export const LoadWallet = (props) => {
 
 	
 
-	const submit = () => {
+	const submit = async () => {
 		// Code for Checking Private Key Address in from ChildCOntract Function
 		console.log(privateKey, typePrivateKey)
+
+		const address_of_key = await get_address(privateKey);
+		
+		const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
+		const wallet = new ethers.Wallet(privateKey, provider);
+		const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
+		
+		if (typePrivateKey=="Main"){
+			if ((await factory.mainMapping(address_of_key))=="0x0000000000000000000000000000000000000000"){
+				// error handling
+			}
+		}
+		else{
+			if ((await factory.backupMapping(address_of_key))=="0x0000000000000000000000000000000000000000"){
+				// error handling
+			}
+		}
+		
+		
+		
+		props.set_private_key_load(privateKey, typePrivateKey)
 		push('/password')
 	};
 
@@ -59,8 +85,8 @@ export const LoadWallet = (props) => {
 						select
 
 					>
-						<MenuItem value="1">Main</MenuItem>
-						<MenuItem value="2">Backup</MenuItem>
+						<MenuItem value="Main">Main</MenuItem>
+						<MenuItem value="Backup">Backup</MenuItem>
 
 					</TextField>
 
