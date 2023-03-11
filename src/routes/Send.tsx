@@ -163,7 +163,7 @@ export const Send = (props) => {
 			<div style={{width:"350px",margin:"auto"}}>
 			{flag ? (
 				<>
-					<div style={{ background: '#f2f4f7', height: 120, marginTop: 10 }}>
+					<div style={{ background: '#f2f4f7', height: 110, marginTop: 10 }}>
 						<button
 							style={{
 								background: 'transparent',
@@ -177,7 +177,7 @@ export const Send = (props) => {
 						>
 							Sending ETH
 						</button>
-						<div style={{ marginLeft: -200, marginTop: -10 }}>
+						<div style={{ marginLeft: -250, marginTop: -10 }}>
 							<h1 style={{ fontWeight: 500 }}>{amount}</h1>
 						</div>
 					</div>
@@ -221,7 +221,7 @@ export const Send = (props) => {
 				</>
 			) : (
 				<>
-					<div className="main" style={{ marginTop: 80 }}>
+					<div className="main" style={{ marginTop: 60 }}>
 						<div style={{ display: 'flex', width: 320, justifyContent: 'space-between' }}>
 							<p style={{ fontSize: '18px' }}>Asset:</p>
 							<div style={{ display: 'flex', border: '1px solid #D7D8DC', borderRadius: 10, width: 200 }}>
@@ -275,7 +275,7 @@ export const Send = (props) => {
 					<div
 						className="footer"
 						style={{
-							marginTop: 90
+							marginTop: 85
 						}}
 					>
 						<div style={{ display: 'flex', width: '350px', justifyContent: 'space-evenly', marginTop: 15 }}>
