@@ -49,7 +49,7 @@ export const Home = (props) => {
 					<Button
 						variant="contained"
 						className="submit-button"
-						onClick={() => console.log('Load Wallet')}
+						onClick={() => push('/loadwallet')}
 						sx={{ borderRadius: 10 }}
 					>
 						Load Wallet

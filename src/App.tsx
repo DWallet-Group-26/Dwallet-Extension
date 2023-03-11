@@ -7,7 +7,9 @@ import { Password } from './routes/Password';
 import { Key } from './routes/Key';
 import { Otp } from './routes/Otp';
 import { Login } from './routes/Login';
+import { LoadWallet } from './routes/LoadWallet';
 import crypto from "crypto-js";
+
 
 import './App.css';
 
@@ -66,6 +68,10 @@ class App extends React.Component {
 	set_private_key(privateKey: string) {
 		this.setState({ privateKey: privateKey });
 	}
+
+	set_private_key_load(privateKey: string, typeKey: string) {
+		this.setState({ privateKey: privateKey, typeKey: typeKey });
+	}
 	
 	set_password(password: string) {
 		try {chrome.storage.local.set({ password: crypto.SHA256(password).toString() }, function () {
@@ -116,6 +122,9 @@ class App extends React.Component {
 						<Login check_password={this.check_password}/>
 					</Route>
 				)}
+				<Route path="/loadwallet">
+					<LoadWallet set_private_key_load = {this.set_private_key_load} />
+				</Route>
 				<Route path="/password">
 					<Password set_password={this.set_password}/>
 				</Route>
