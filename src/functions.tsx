@@ -20,13 +20,22 @@ export const get_address = (private_key) => {
 
 }
 
-export const get_multi_sig_address = async (mainKey,address) => {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
-    const wallet = new ethers.Wallet(mainKey, provider);
-    const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
-    let multisigaddr = await factory.mainMapping(address);
-    console.log(multisigaddr);
-    return multisigaddr;
+export const get_multi_sig_address = async (mainKey,address,type = "Main") => {
+    if (type == "Main") {
+        const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
+        const wallet = new ethers.Wallet(mainKey, provider);
+        const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
+        let multisigaddr = await factory.mainMapping(address);
+        console.log(multisigaddr);
+        return multisigaddr;
+    } else {
+        const provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_PROVIDER_URL);
+        const wallet = new ethers.Wallet(mainKey, provider);
+        const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
+        let multisigaddr = await factory.backupMapping(address);
+        console.log(multisigaddr);
+        return multisigaddr;
+    }
 }
 
 export const get_balance = async (address) => {

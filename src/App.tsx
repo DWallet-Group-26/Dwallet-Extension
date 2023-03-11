@@ -31,6 +31,7 @@ class App extends React.Component {
 		this.state = {
 			privateKey: null,
 			privateKeyEncrypted: true,
+			typeKey: "Main",
 			password: null,
 
 			login: false,
@@ -110,11 +111,11 @@ class App extends React.Component {
 			<Switch>
 				{this.state.login && (
 					<Route path="/profile">
-						<Profile privateKey={this.state.privateKey}/>
+						<Profile privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
 					</Route>)}
 				{this.state.login && (
 					<Route path="/send">
-						<Send privateKey={this.state.privateKey}/>
+						<Send privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
 					</Route>
 				)}
 				{this.state.created_wallet && (

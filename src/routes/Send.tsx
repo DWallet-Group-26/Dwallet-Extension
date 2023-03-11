@@ -34,7 +34,7 @@ export const Send = (props) => {
 	useEffect(async() => {
 		try{
 			console.log(props.privateKey)
-			let addr = await get_multi_sig_address(props.privateKey,get_address(props.privateKey))
+			let addr = await get_multi_sig_address(props.privateKey,get_address(props.privateKey),props.typeKey)
 			console.log(addr)
 			let multisigbal = ethers.utils.formatEther(await get_balance(addr))
 			console.log(multisigbal)

@@ -28,7 +28,7 @@ export const Profile = (props) => {
 
 	useEffect(async() => {
 		try{
-			let addr = await get_multi_sig_address(props.privateKey,mainkeyaddr)
+			let addr = await get_multi_sig_address(props.privateKey,mainkeyaddr,props.typeKey)
 			setMultiwalletaddr(addr);
 			let multisigbal = ethers.utils.formatEther(await get_balance(addr))
 			setMultisigwalletbal(multisigbal.substring(0,6));
