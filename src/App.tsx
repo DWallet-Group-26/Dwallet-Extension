@@ -41,6 +41,7 @@ class App extends React.Component {
 		this.set_private_key = this.set_private_key.bind(this);
 		this.set_password = this.set_password.bind(this);
 		this.check_password = this.check_password.bind(this);
+		this.set_private_key_load = this.set_private_key_load.bind(this);
 	}
 
 	async componentDidMount() {
@@ -48,16 +49,18 @@ class App extends React.Component {
 		let created_wallet = this.state.created_wallet;
 		let privateKey = this.state.privateKey;
 		let password = this.state.password;
+		let typeKey = this.state.typeKey;
 		
 		try{
 			privateKey = await readLocalStorage('privateKey');
 			password = await readLocalStorage('password');
+			typeKey = await readLocalStorage('typeKey');
 			created_wallet = true;
 		}
 		catch (e) {
 			console.log("Error: " + e);
 		}
-		this.setState({ created_wallet: created_wallet,privateKey: privateKey,password: password, loading: false });
+		this.setState({ created_wallet: created_wallet,privateKey: privateKey,password: password, loading: false, typeKey: typeKey });
 
 	}
 
@@ -80,7 +83,10 @@ class App extends React.Component {
 		});
 		chrome.storage.local.set({ "privateKey": crypto.AES.encrypt(this.state.privateKey,password).toString() }, function () {
 			console.log('Private key is encrypted and stored');
-		});}
+		});
+		chrome.storage.local.set({typeKey: this.state.typeKey})
+		
+	}
 		catch (e) {
 			console.log("Error: " + e);
 		}

@@ -29,7 +29,7 @@ export const LoadWallet = (props) => {
 
 	const submit = async () => {
 		// Code for Checking Private Key Address in from ChildCOntract Function
-		console.log(privateKey, typePrivateKey)
+		console.log(privateKey, typePrivateKey);
 
 		const address_of_key = await get_address(privateKey);
 		
@@ -38,17 +38,18 @@ export const LoadWallet = (props) => {
 		const factory = new ethers.Contract(process.env.REACT_APP_MULTISIG_FACTORY_ADDRESS, FACTORY_ABI, wallet);
 		
 		if (typePrivateKey=="Main"){
-			if ((await factory.mainMapping(address_of_key))=="0x0000000000000000000000000000000000000000"){
-				// error handling
+			if ((await factory.mainMapping(address_of_key))==="0x0000000000000000000000000000000000000000"){
+				console.log('Privtae Key/ TYpe of Key is incorrect')
+				return 
 			}
 		}
 		else{
-			if ((await factory.backupMapping(address_of_key))=="0x0000000000000000000000000000000000000000"){
-				// error handling
+			if ((await factory.backupMapping(address_of_key))==="0x0000000000000000000000000000000000000000"){
+				console.log('Privtae Key/ TYpe of Key is incorrect')
+				return 
+
 			}
 		}
-		
-		
 		
 		props.set_private_key_load(privateKey, typePrivateKey)
 		push('/password')
@@ -95,7 +96,7 @@ export const LoadWallet = (props) => {
 						className="submit-button"
 						onClick={submit}
 						sx={{ borderRadius: 10, width: 120, alignSelf: 'center' }}
-						{...(!(privateKey.length===64) ? { disabled: true } : {})}
+						{...(!(privateKey.length===66) ? { disabled: true } : {})}
 					>
 						Load
 					</Button>

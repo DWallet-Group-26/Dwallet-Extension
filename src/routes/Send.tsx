@@ -33,7 +33,7 @@ export const Send = (props) => {
 
 	useEffect(async() => {
 		try{
-			console.log(props.privateKey)
+			console.log(props.privateKey, props.typeKey)
 			let addr = await get_multi_sig_address(props.privateKey,get_address(props.privateKey),props.typeKey)
 			console.log(addr)
 			let multisigbal = ethers.utils.formatEther(await get_balance(addr))
@@ -66,13 +66,13 @@ export const Send = (props) => {
 
 	const submit1 = async () => {
 		// create transaction in contract and send otp request to server
-		const txidx = await create_transaction(props.privateKey, address,ethers.utils.parseEther(amount.toString()) );
+		const txidx = await create_transaction(props.privateKey, address,ethers.utils.parseEther(amount.toString()), props.typeKey );
 		console.log(txidx);
 
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "publicKey":  get_address(props.privateKey), "transactionID": txidx})
+			body: JSON.stringify({ "publicKey":  get_address(props.privateKey), "transactionID": txidx, typeKey: props.typeKey})
 		};
 		fetch(process.env.REACT_APP_SERVER + '/api/dwallet/send-otp', requestOptions)
 			.then(response => {
@@ -91,7 +91,7 @@ export const Send = (props) => {
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ "publicKey":  get_address(props.privateKey),"transactionID": transactionID, "otp": otp})
+			body: JSON.stringify({ "publicKey":  get_address(props.privateKey),"transactionID": transactionID, "otp": otp, typeKey: props.typeKey})
 		};
 		fetch(process.env.REACT_APP_SERVER + '/api/dwallet/verify-otp', requestOptions)
 			.then(response => {
