@@ -37,14 +37,16 @@ export const StoreBackupKey = (props) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ "phone": phoneNumber, "key": privateKey, password })
 		};
-		fetch(process.env.REACT_APP_SERVER + '/api/dwallet/backup_store', requestOptions)
+		fetch(process.env.REACT_APP_SERVER + '/api/backupStore/backup_store/', requestOptions)
 			.then(response => {
 				console.log(response.text())
+                if(response.status===200){
+                    push('/profile')
+                }
 			}).catch(err => {
 				console.log(err)
 			})
 		
-		push('/send')
 	};
 
 	return (
@@ -64,6 +66,7 @@ export const StoreBackupKey = (props) => {
 						onChange={e => {
 							setPhoneNumber(e.target.value);
 						}}
+                        required
 						size="small"
 					/>
 
@@ -76,6 +79,8 @@ export const StoreBackupKey = (props) => {
 							setPrivateKey(e.target.value);
 						}}
 						size="small"
+                        required
+
 					/>
 
                     <TextField
@@ -87,6 +92,7 @@ export const StoreBackupKey = (props) => {
 							setPassword(e.target.value);
 						}}
 						size="small"
+                        required
 					/>
 
 					<Button
