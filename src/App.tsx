@@ -9,8 +9,8 @@ import { Otp } from './routes/Otp';
 import { Login } from './routes/Login';
 import { LoadWallet } from './routes/LoadWallet';
 import crypto from "crypto-js";
-
-
+import {RetrieveBackupKey} from './routes/RetrieveBackupKey'
+import {StoreBackupKey} from './routes/StoreBackupKey'
 import './App.css';
 
 const readLocalStorage = async (key) => {
@@ -119,11 +119,11 @@ class App extends React.Component {
 					<Route path="/profile">
 						<Profile privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
 					</Route>)}
-				{this.state.login && (
+				{/* {this.state.login && ( */}
 					<Route path="/send">
 						<Send privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
 					</Route>
-				)}
+				{/* )} */}
 				{this.state.created_wallet && (
 					<Route path="/login">
 						<Login check_password={this.check_password}/>
@@ -132,6 +132,15 @@ class App extends React.Component {
 				<Route path="/loadwallet">
 					<LoadWallet set_private_key_load = {this.set_private_key_load} />
 				</Route>
+
+				<Route path="/retrievebackup">
+					<RetrieveBackupKey />
+				</Route>
+
+				<Route path="/storebackup">
+					<StoreBackupKey />
+				</Route>
+				
 				<Route path="/password">
 					<Password set_password={this.set_password}/>
 				</Route>

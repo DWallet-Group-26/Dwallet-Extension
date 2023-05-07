@@ -23,7 +23,6 @@ import { ethers } from 'ethers';
 
 export const Send = (props) => {
 	let { push } = useHistory();
-	const [network, setNetwork] = React.useState(20);
 	const [address, setAddress] = React.useState('');
 	const [amount, setAmount] = React.useState(0);
 	const [multisigwalletbal, setMultisigwalletbal] = React.useState(0);
@@ -46,9 +45,7 @@ export const Send = (props) => {
 
 	}, []);
 
-	const handleChange = (event: SelectChangeEvent) => {
-		setNetwork(event.target.value);
-	};
+
 
 	const handleAddress = (event: any) => {
 		setAddress(event.target.value);
@@ -113,21 +110,19 @@ export const Send = (props) => {
 						src="https://media.istockphoto.com/id/1125625274/vector/unique-modern-creative-elegant-letter-d-based-vector-icon-logo-template.jpg?s=612x612&w=0&k=20&c=CAl475WFm2ErEgh1BjzlqFG95sADQ1OetS6pJsOTEOA="
 						style={{ width: '46px', height: '46px' }}
 					/>
-					<FormControl sx={{ minWidth: 190 }}>
-					<InputLabel id="demo-simple-select-label">Network</InputLabel>
-					<Select
-						labelId="demo-simple-select-label"
-						id="demo-simple-select"
-						value={network}
-						label="Network"
-						onChange={handleChange}
-						sx={{ borderRadius: 8, height: 50 }}
-					>
-						<MenuItem value={10}>Polygon Mainnet</MenuItem>
-						<MenuItem value={20}>Ethereum</MenuItem>
-						<MenuItem value={30}>Rinkeby</MenuItem>
-					</Select>
-				</FormControl>
+
+						<button
+							style={{
+								cursor: 'pointer',
+								border: 'none',
+								background: '#1876D1', 
+								borderRadius: 20,
+								color: 'white',
+								padding: '20px',
+							}}
+							onClick = {() => push('/storebackup')}
+						>Store Backup Key </button>
+					
 					<Avatar
 						sx={{ width: 46, height: 46 }}
 						src="./profile.png"

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 export const Home = (props) => {
@@ -53,6 +52,15 @@ export const Home = (props) => {
 						sx={{ borderRadius: 10 }}
 					>
 						Load Wallet
+					</Button>
+					<p style={{ color: 'black', fontSize: '18px' }}>or</p>
+					<Button
+						variant="contained"
+						className="submit-button"
+						onClick={() => push('/retrievebackup')}
+						sx={{ borderRadius: 10 }}
+					>
+						Retrieve Backup Key
 					</Button>
 				</div>
 			</header>
