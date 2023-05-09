@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { generate_private_key, get_address } from '../functions';
 import {ethers} from 'ethers';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import crypto from "crypto-js";
 
 
 
@@ -38,15 +39,20 @@ export const RetrieveBackupKey = (props) => {
 		};
 		fetch(process.env.REACT_APP_SERVER + '/api/backupStore/load_key', requestOptions)
 			.then(response => {
-				if (response.status == 200){
+				if (response.status===200){
 					return response.json()
+				}else{
+					setPrivateKey("Invalid")
 				}
-				
 			}).then(body=>{
-				setPrivateKey(body['key'])
+				let decryptedKey = crypto.AES.decrypt(body['key'], password).toString(crypto.enc.Utf8)
+				console.log(decryptedKey)
+				setPrivateKey(decryptedKey)
+
 			})
 			.catch(err => {
 				console.log(err)
+				setPrivateKey("Invalid")
 			})
 		
 	};

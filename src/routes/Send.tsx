@@ -20,6 +20,7 @@ import SwapVertIcon from '@mui/icons-material/SwapVert';
 import TextField from '@mui/material/TextField';
 import { get_address,get_multi_sig_address,get_balance, address_valid, create_transaction } from '../functions';
 import { ethers } from 'ethers';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export const Send = (props) => {
 	let { push } = useHistory();
@@ -122,11 +123,7 @@ export const Send = (props) => {
 							}}
 							onClick = {() => push('/storebackup')}
 						>Store Backup Key </button>
-					
-					<Avatar
-						sx={{ width: 46, height: 46 }}
-						src="./profile.png"
-					></Avatar>
+				<LogoutIcon style={{cursor: 'pointer',float:"right",marginTop:"10px"}} onClick={()=>logout()} />
 				</header>
 				<div>
 					<h2 style={{ fontWeight: 300, fontSize: '18px' }}>Send</h2>

@@ -17,6 +17,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {get_balance, get_multi_sig_address,get_address} from '../functions';
 import {ethers} from 'ethers';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export const Profile = (props) => {
 	let { push } = useHistory();
@@ -65,6 +66,12 @@ export const Profile = (props) => {
 		);
 	};
 
+	const logout = ()=>{
+		props.logout()
+		push('/')
+
+	}
+
 	return (
 		<div className="App" style={{ width:"350px", margin:"auto"}}>
 			<header className="main-page-header" style={{ height: 80 }}>
@@ -83,10 +90,8 @@ export const Profile = (props) => {
 					}}
 					onClick = {() => push('/storebackup')}
 				>Store Backup Key </button>
-				<Avatar
-					sx={{ width: 46, height: 46 }}
-					src="./profile.png"
-				></Avatar>
+				{/* Add logout  */}
+				<LogoutIcon style={{cursor: 'pointer',float:"right",marginTop:"10px"}} onClick={()=>logout()} />
 			</header>
 			<div className="sub-header">
 				<div style={{ fontSize: '10px' }}>

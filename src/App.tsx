@@ -42,6 +42,7 @@ class App extends React.Component {
 		this.set_password = this.set_password.bind(this);
 		this.check_password = this.check_password.bind(this);
 		this.set_private_key_load = this.set_private_key_load.bind(this);
+		this.logout = this.logout.bind(this);
 	}
 
 	async componentDidMount() {
@@ -105,6 +106,10 @@ class App extends React.Component {
 		}
 	}
 
+	logout(){
+		this.setState({login: false, privateKey: null, password: null, created_wallet: false, privateKeyEncrypted: false });
+	}
+
 	  render() {
 		if (this.state.loading) {
 			return (
@@ -115,15 +120,15 @@ class App extends React.Component {
 		}
 		return (
 			<Switch>
-				{this.state.login && (
-					<Route path="/profile">
-						<Profile privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
-					</Route>)}
 				{/* {this.state.login && ( */}
-					<Route path="/send">
-						<Send privateKey={this.state.privateKey} typeKey={this.state.typeKey}/>
+					<Route path="/profile">
+						<Profile privateKey={this.state.privateKey} typeKey={this.state.typeKey} logout={this.logout} />
 					</Route>
-				{/* )} */}
+				{this.state.login && (
+					<Route path="/send">
+						<Send privateKey={this.state.privateKey} typeKey={this.state.typeKey} logout={this.logout} />
+					</Route>
+				)}
 				{this.state.created_wallet && (
 					<Route path="/login">
 						<Login check_password={this.check_password}/>
@@ -136,10 +141,12 @@ class App extends React.Component {
 				<Route path="/retrievebackup">
 					<RetrieveBackupKey />
 				</Route>
-
+				
+				{this.state.login && (
 				<Route path="/storebackup">
 					<StoreBackupKey />
 				</Route>
+				)}
 				
 				<Route path="/password">
 					<Password set_password={this.set_password}/>
